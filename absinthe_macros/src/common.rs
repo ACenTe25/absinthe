@@ -107,3 +107,18 @@ fn validate_absfact_ident_arg_and_get_trait_and_registry(
 
     get_absfact_trait_and_registry(&arg_ident)
 }
+
+pub fn validate_option_input<T>(input: Option<T>) -> Result<T, TS2> {
+
+    match input {
+        
+        Some(val) => Ok(val),
+
+        None => Err(
+            quote!(
+                compile_error!("Could not continue applying attribute due to \
+                previous errors in this macro.")
+            )
+        )
+    }
+}
