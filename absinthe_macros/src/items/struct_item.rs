@@ -1,6 +1,9 @@
 // super
 use super::*;
 
+// crates.io
+use syn::ItemStruct;
+
 // CODE
 
 #[derive(Clone)]
@@ -50,16 +53,24 @@ impl FromSynItem for AbsintheStruct {
 
             Item::Struct(structitem) => {
 
-                let attributes = structitem.attrs.clone();
-
-                let ident = structitem.ident.clone();
-
                 Some(
-                    Self { attributes, ident }
+                    Self::from_syn_itemstruct(structitem)
                 )
             }
 
             _ => None
         }
+    }
+}
+
+impl AbsintheStruct {
+
+    pub fn from_syn_itemstruct(itemstruct: &ItemStruct) -> Self {
+
+        let attributes = itemstruct.attrs.clone();
+
+        let ident = itemstruct.ident.clone();
+
+        Self { attributes, ident }
     }
 }

@@ -2,7 +2,7 @@
 use super::*;
 
 // crates.io
-use syn::TypeParamBound;
+use syn::{ItemTrait, TypeParamBound};
 
 // CODE
 
@@ -50,37 +50,46 @@ impl FromSynItem for AbsintheTrait {
 
             Item::Trait(traititem) => {
 
-                let attributes = traititem.attrs.clone();
-
-                let ident = traititem.ident.clone();
-
-                let supertraits: Vec<Ident> = traititem
-                .supertraits
-                .iter()
-                .filter_map(
-                    |tpb| {
-
-                        match tpb {
-
-                            TypeParamBound::Trait(traitbound) => match traitbound
-                            .path.get_ident() {
-
-                                Some(ident) => Some(ident.clone()),
-
-                                None => None
-                            }
-
-                            _ => None
-                        }
-                    }
-                ).collect();
-
                 Some(
-                    Self { attributes, ident, supertraits }
+                    Self::from_syn_itemtrait(traititem)
                 )
             }
 
             _ => None
         }
+    }
+}
+
+impl AbsintheTrait {
+
+    pub fn from_syn_itemtrait(itemtrait: &ItemTrait) -> Self {
+
+        let attributes = itemtrait.attrs.clone();
+
+        let ident = itemtrait.ident.clone();
+
+        let supertraits: Vec<Ident> = itemtrait
+        .supertraits
+        .iter()
+        .filter_map(
+            |tpb| {
+
+                match tpb {
+
+                    TypeParamBound::Trait(traitbound) => match traitbound
+                    .path.get_ident() {
+
+                        Some(ident) => Some(ident.clone()),
+
+                        None => None
+                    }
+
+                    _ => None
+                }
+            }
+        )
+        .collect();
+
+        Self { attributes, ident, supertraits }
     }
 }

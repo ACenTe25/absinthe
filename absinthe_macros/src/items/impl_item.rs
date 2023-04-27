@@ -2,7 +2,7 @@
 use super::*;
 
 // crates.io
-use syn::Type;
+use syn::{ItemImpl, Type};
 
 // CODE
 
@@ -50,38 +50,47 @@ impl FromSynItem for AbsintheImpl {
 
             Item::Impl(implitem) => {
 
-                let attributes = implitem.attrs.clone();
-
-                let self_type = match implitem.self_ty.as_ref() {
-
-                    Type::Path(path) => match path.path.get_ident() {
-
-                        Some(ident) => ident.clone(),
-
-                        None => return None
-                    }
-
-                    _ => return None
-                };
-
-                let trait_ = match implitem.trait_.as_ref() {
-
-                    Some((_, path, _)) => match path.get_ident() {
-
-                        Some(ident) => ident.clone(),
-
-                        None => return None
-                    }
-
-                    _ => return None
-                };
-
-                Some(
-                    Self { attributes, self_type, trait_ }
-                )
+                Self::from_syn_itemimpl(implitem)
             }
 
             _ => None
         }
+    }
+}
+
+impl AbsintheImpl {
+
+    pub fn from_syn_itemimpl(itemimpl: &ItemImpl) -> Option<Self> {
+
+        let attributes = itemimpl.attrs.clone();
+
+        let self_type = match itemimpl.self_ty.as_ref() {
+
+            Type::Path(path) => match path.path.get_ident() {
+
+                Some(ident) => ident.clone(),
+
+                None => return None
+            }
+
+            _ => return None
+        };
+
+        let trait_ = match itemimpl.trait_.as_ref() {
+
+            Some((_, path, _)) => match path.get_ident() {
+
+                Some(ident) => ident.clone(),
+
+                None => return None
+            }
+
+            _ => return None
+        };
+
+        Some(
+            Self { attributes, self_type, trait_}
+        )
+
     }
 }

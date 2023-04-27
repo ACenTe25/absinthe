@@ -117,8 +117,21 @@ pub fn validate_option_input<T>(input: Option<T>) -> Result<T, TS2> {
         None => Err(
             quote!(
                 compile_error!("Could not continue applying attribute due to \
-                previous errors in this macro.")
+                previous errors in this macro.");
             )
         )
     }
+}
+
+pub fn add_to_output(
+    additional_output: TS2, 
+    output_stream: &mut TS2
+) {
+
+    *output_stream = quote!(
+
+        #output_stream
+
+        #additional_output
+    );
 }
