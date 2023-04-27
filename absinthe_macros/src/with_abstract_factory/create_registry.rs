@@ -10,15 +10,16 @@ pub fn create_factory_registry(
 ) -> TS2 {
 
     let err_output = quote!(
+        
         compile_error!("Could not continue applying attribute due to previous \
         errors in this macro.");
     );
 
-    let Ok(reg_name) = validate_option_input(registry_name) else {
+    let Some(reg_name) = registry_name else {
         return err_output
     };
 
-    let Ok(fact_trait_ident) = validate_option_input(factory_trait_ident) else {
+    let Some(fact_trait_ident) = factory_trait_ident else {
         return err_output
     };
 

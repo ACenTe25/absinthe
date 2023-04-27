@@ -99,7 +99,7 @@ pub fn get_absfact_trait_and_registry(
     Ok((af_ident, af_registry_ident))
 }
 
-fn validate_absfact_ident_arg_and_get_trait_and_registry(
+pub fn validate_absfact_ident_arg_and_get_trait_and_registry(
     arg_tokens: TS1
 ) -> Result<(Ident, Ident), TS2> {
     
