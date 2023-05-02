@@ -71,6 +71,22 @@ pub fn with_abstract_factory_logic(arg_tokens: TS1, item_tokens: TS1) -> TS1 {
             &mut output_stream
         );
     }
+
+    match &registry_name {
+
+        None => (),
+
+        Some(name) => if name.to_uppercase().as_str() != name.as_str() {
+
+            add_to_output(
+                quote!(
+                    compile_error!("Incorrect 'registry' argument: must be \
+                    uppercase.");
+                ),
+                &mut output_stream
+            );
+        }
+    };
     
     let registry_output = create_factory_registry(
         &registry_name,
@@ -100,7 +116,10 @@ pub fn with_abstract_factory_logic(arg_tokens: TS1, item_tokens: TS1) -> TS1 {
 
         Ok(_) => (),
 
-        Err(errst) => add_to_output(errst, &mut output_stream),
+        Err(errst) => add_to_output(
+            errst, 
+            &mut output_stream
+        ),
     };
 
     output_stream.into()

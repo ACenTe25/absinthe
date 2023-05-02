@@ -5,7 +5,7 @@ use super::*;
 use crate::items::*;
 
 // crates.io
-use syn::{Lit, meta::parser, parse};
+use syn::{Lit, parse};
 
 // CODE
 
@@ -19,25 +19,6 @@ pub fn validate_arg_str(arg_tokens: TS1) -> Result<String, TS2> {
             quote!(
                 compile_error!("Incorrect attribute argument: must be a \
                 literal string.");
-            )
-        )
-    }
-}
-
-pub fn validate_arg_str_uppercase(arg_tokens: TS1) -> Result<String, TS2> {
-
-    let arg = validate_arg_str(arg_tokens)?;
-
-    if arg == arg.to_uppercase() {
-
-        Ok(arg)
-
-    } else {
-
-        Err(
-            quote!(
-                compile_error!("Incorrect attribute argument: must be \
-                uppercase.");
             )
         )
     }
@@ -134,46 +115,4 @@ pub fn add_to_output(
 
         #additional_output
     );
-}
-
-pub fn parse_named_str_and_ident(
-    arg_tokens: TS1, 
-    named_key: &str, 
-    named_value_ref: &mut Option<String>,
-    ident_ref: &mut Option<Ident>
-) -> TS1 {
-
-    let parser = parser(
-
-        |meta| {
-
-            if meta.path.is_ident(named_key) {
-
-                *named_value_ref = match meta.value()?.parse::<Lit>()? {
-
-                    Lit::Str(txt) => Some(txt.value()),
-
-                    _ => return Err(meta.error("argument key must be literal \
-                    string."))
-                };
-
-                Ok(())
-
-            } else {
-
-                *ident_ref = match meta.path.get_ident() {
-
-                    Some(id) => Some(id.clone()),
-
-                    None => None
-                };
-
-                Ok(())
-            }
-        }
-    );
-
-    parse_macro_input!(arg_tokens with parser);
-
-    quote!().into()
 }
