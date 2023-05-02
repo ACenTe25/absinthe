@@ -12,11 +12,8 @@ use syn::ItemTrait;
 mod parse_args;
 use parse_args::parse_with_absfact_args;
 
-mod find_absfact;
-use find_absfact::find_abstract_factory;
-
-mod get_factory_trait;
-use get_factory_trait::get_factory_trait;
+mod check_impls;
+use check_impls::check_target_trait_impls;
 
 mod create_absfact;
 use create_absfact::create_abstract_factory;
@@ -98,6 +95,13 @@ pub fn with_abstract_factory_logic(arg_tokens: TS1, item_tokens: TS1) -> TS1 {
     );
 
     add_to_output(factory_trait_output, &mut output_stream);
+
+    match check_target_trait_impls(&target_ident) {
+
+        Ok(_) => (),
+
+        Err(errst) => add_to_output(errst, &mut output_stream),
+    };
 
     output_stream.into()
 }

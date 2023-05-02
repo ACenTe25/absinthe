@@ -20,7 +20,7 @@ pub fn create_factory_trait(
 
     quote!(
 
-        pub trait #factory_trait {
+        pub trait #factory_trait: Send {
 
             fn new(
                 config: Box<dyn AbsintheConfig>
