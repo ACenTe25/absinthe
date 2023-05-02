@@ -5,7 +5,7 @@ use super::*;
 use crate::items::*;
 
 // crates.io
-use syn::{Lit, parse};
+use syn::{Lit, meta::parser, parse};
 
 // CODE
 
@@ -108,11 +108,11 @@ pub fn validate_absfact_ident_arg_and_get_trait_and_registry(
     get_absfact_trait_and_registry(&arg_ident)
 }
 
-pub fn validate_option_input<T>(input: Option<T>) -> Result<T, TS2> {
+pub fn validate_option_input<T: Clone>(input: Option<T>) -> Result<T, TS2> {
 
     match input {
         
-        Some(val) => Ok(val),
+        Some(val) => Ok(val.clone()),
 
         None => Err(
             quote!(
@@ -134,4 +134,46 @@ pub fn add_to_output(
 
         #additional_output
     );
+}
+
+pub fn parse_named_str_and_ident(
+    arg_tokens: TS1, 
+    named_key: &str, 
+    named_value_ref: &mut Option<String>,
+    ident_ref: &mut Option<Ident>
+) -> TS1 {
+
+    let parser = parser(
+
+        |meta| {
+
+            if meta.path.is_ident(named_key) {
+
+                *named_value_ref = match meta.value()?.parse::<Lit>()? {
+
+                    Lit::Str(txt) => Some(txt.value()),
+
+                    _ => return Err(meta.error("argument key must be literal \
+                    string."))
+                };
+
+                Ok(())
+
+            } else {
+
+                *ident_ref = match meta.path.get_ident() {
+
+                    Some(id) => Some(id.clone()),
+
+                    None => None
+                };
+
+                Ok(())
+            }
+        }
+    );
+
+    parse_macro_input!(arg_tokens with parser);
+
+    quote!().into()
 }

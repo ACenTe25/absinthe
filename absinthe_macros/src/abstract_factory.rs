@@ -10,9 +10,6 @@ use crate::common::*;
 use syn::ItemStruct;
 
 // Modules
-mod args_parser;
-use args_parser::parse_abstract_factory_args;
-
 mod new_fn;
 use new_fn::create_new_fn;
 
@@ -42,8 +39,9 @@ pub fn abstract_factory_logic(arg_tokens: TS1, item_tokens: TS1) -> TS1 {
 
     let mut target_trait_ident: Option<Ident> = None;
 
-    _ = parse_abstract_factory_args(
+    _ = parse_named_str_and_ident(
         arg_tokens, 
+        "key",
         &mut key, 
         &mut target_trait_ident
     );

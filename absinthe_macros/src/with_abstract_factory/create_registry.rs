@@ -4,9 +4,9 @@ use super::*;
 // CODE
 
 pub fn create_factory_registry(
-    registry_name: Option<String>,
+    registry_name: &Option<String>,
     target_ident: &Ident,
-    factory_trait_ident: Option<Ident>
+    factory_trait_ident: &Option<Ident>
 ) -> TS2 {
 
     let err_output = quote!(
