@@ -12,6 +12,9 @@ use syn::ItemImpl;
 mod target;
 use target::*;
 
+mod validate;
+use validate::*;
+
 // CODE
 
 pub fn with_factory_logic(arg_tokens: TS1, item_tokens: TS1) -> TS1 {
@@ -58,11 +61,26 @@ pub fn with_factory_logic(arg_tokens: TS1, item_tokens: TS1) -> TS1 {
             &mut output_stream
         )
     };
+ 
+    match validate_unique_abstract_factory(&concrete_absimpl) {
 
-    // Validar que este struct solo tenga este impl con atributo "with_factory"
+        Ok(_) => (),
 
-    // Validar que solo exista un bloque impl con el atributo "factory" y argumento
-    // igual a este self_type.
+        Err(errst) => add_to_output(
+            errst,
+            &mut output_stream
+        )
+    };
+
+    match validate_unique_concrete_factory(&concrete_absimpl) {
+
+        Ok(_) => (),
+
+        Err(errst) => add_to_output(
+            errst,
+            &mut output_stream
+        )
+    };
 
     output_stream.into()
 }
