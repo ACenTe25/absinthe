@@ -26,16 +26,14 @@ pub fn with_factory_logic(arg_tokens: TS1, item_tokens: TS1) -> TS1 {
         #concrete_item
     );
 
-    let concrete_name = match validate_arg_str(arg_tokens) {
+    match validate_arg_str(arg_tokens) {
 
-        Ok(txt) => Some(txt),
+        Ok(_) => (),
 
-        Err(errst) => {
-
-            add_to_output(errst, &mut output_stream);
-
-            None
-        }
+        Err(errst) => add_to_output(
+            errst, 
+            &mut output_stream
+        )
     };
 
     let Some(concrete_absimpl) = AbsintheImpl::from_syn_itemimpl(
