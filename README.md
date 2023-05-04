@@ -1,6 +1,10 @@
-# Absinthe: Rust abstract factory procedural macros
+# ***WORK IN PROGRESS***
 
-### ACenTe25
+The crate is not finished yet. Please don't use it, I may be 
+"finished" today, and even then I will work on tests and 
+documentation. So yeah... this is still a WIP...
+
+# Absinthe: Rust abstract factory procedural macros
 
 ### What is Absinthe?
 
