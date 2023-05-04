@@ -1,2 +1,3 @@
 /target
 /Cargo.lock
+/absinthe_macros/target
