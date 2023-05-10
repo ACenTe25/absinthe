@@ -37,7 +37,7 @@ where T: FromSynItem + 'static {
     where Ident: PartialEq<U> + PartialEq<V> {
 
         self.retain(
-            |item| item.has_attr_with_arg(filter_attr, filter_arg)
+            |item| item.has_attr_with_single_arg(filter_attr, filter_arg)
         );
 
         self

@@ -21,7 +21,7 @@ where T: FromSynItem + 'static {
 
         for item in self.iter() {
 
-            match item.get_attr_arg(attribute) {
+            match item.get_attr_single_arg(attribute) {
 
                 Some(arg) => if hashargs.contains(&arg) {
 

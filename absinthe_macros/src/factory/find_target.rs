@@ -1,9 +1,6 @@
 // super
 use super::*;
 
-// crate
-use crate::items::*;
-
 // CODE
 pub fn find_target_trait(concrete_type: &Ident) -> Result<Ident, TS2> {
 
@@ -33,17 +30,4 @@ pub fn find_target_trait(concrete_type: &Ident) -> Result<Ident, TS2> {
     };
 
     Ok(target_trait_ident.clone())
-}
-
-pub fn get_registry_ident(target_trait: &Ident) -> Result<Ident, TS2> {
-
-    type Traits = CrateItems<AbsintheTrait>;
-
-    let mut traits = Traits::get();
-
-    traits
-    .filter_ident(target_trait)
-    .filter_with_attr("with_abstract_factory");
-
-    unimplemented!()
 }
