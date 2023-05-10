@@ -1,7 +1,7 @@
 # ***WORK IN PROGRESS***
 
-The crate is not finished yet. Please don't use it, I may be 
-"finished" today, and even then I will work on tests and 
+The crate is not tested yet. Please don't use it, I may be 
+"tested" today, and even then I will work on its 
 documentation. So yeah... this is still a WIP...
 
 # Absinthe: Rust abstract factory procedural macros
