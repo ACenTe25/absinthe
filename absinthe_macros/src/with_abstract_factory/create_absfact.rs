@@ -40,12 +40,12 @@ pub fn create_abstract_factory(
         impl #absfact {
 
             pub fn new(
-                config: Box<dyn AbsintheConfig>
+                config: Box<dyn AbsintheConf>
             ) -> anyhow::Result<Box<dyn #target_ident>> {
 
                 use anyhow::anyhow;
 
-                let concrete_type = config.get(#config_key.as_str())?;
+                let concrete_type = config.get(#config_key)?;
 
                 let factory_registry = #registry_ident
                 .lock()

@@ -60,8 +60,8 @@ pub fn get_absfact_trait_and_registry(
 
     let af_ident = absfact_trait.get_ident().clone();
 
-    let Some(af_registry_name) = absfact_trait.get_attr_single_arg(
-        "with_abstract_factory"
+    let Some(af_registry_name) = absfact_trait.get_attr_pair_arg_str(
+        "with_abstract_factory", "registry"
     ) else {
         return Err(
             quote!(

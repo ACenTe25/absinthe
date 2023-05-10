@@ -8,3 +8,6 @@ edition = "2021"
 [dependencies]
 anyhow = "1.0.70"
 absinthe_macros = { path = "./absinthe_macros" }
+
+[dev-dependencies]
+lazy_static = "1"

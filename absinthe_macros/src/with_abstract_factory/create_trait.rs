@@ -23,7 +23,8 @@ pub fn create_factory_trait(
         pub trait #factory_trait: Send {
 
             fn new(
-                config: Box<dyn AbsintheConfig>
+                &self,
+                config: Box<dyn AbsintheConf>
             ) -> anyhow::Result<Box<dyn #target_ident>>;
         }
     )
