@@ -3,7 +3,6 @@ use absinthe::*;
 
 // crates.io
 use anyhow::*;
-use lazy_static::*;
 
 // FOR COMPILATION
 
