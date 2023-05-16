@@ -4,6 +4,12 @@ The crate is not tested yet. Please don't use it, I may be
 "tested" today, and even then I will work on its 
 documentation. So yeah... this is still a WIP...
 
+**Warning:** Items using these attributes should not be declared inside of a 
+code block or function. Currently, the macros may show errors if this happens, 
+or may not work as expected. So these items (trait declarations, impl blocks, 
+struct declarations) should live in the file 'root' level, not inside of other 
+items such as modules (declared within the same file) or functions.
+
 # Absinthe: Rust abstract factory procedural macros
 
 ### What is Absinthe?
@@ -123,3 +129,56 @@ crate, please submit an issue and I'll do my best to follow up on
 it.
 
 Or send a pull request :D
+
+### Next steps / todo
+
+1. So... There may be use cases where the macros will be used on items which are 
+   declared inside a block, which could be a module, a function or something else.
+
+   In these cases, the lookup functions searching for items with the other 
+   attributes will not find these items, because they will find the blocks first 
+   and since those won't match any of the expected declaration forms, they will
+   skip the blocks and say they didn't find any matches.
+
+   So it would be nice to improve these lookup functions in order to go inside 
+   other blocks to find the items we're looking for, but how far does the rabbit 
+   hole go? How would this impact performance for very large projects? Is there 
+   another way?
+
+   Early on I thought about a metaregistry for all abstract factories and their 
+   attributes in order to look there, but I haven't tested that idea yet. That 
+   may complicate the macros themselves a bit, since they would have to 
+   self-register in the meta registry, but maybe, if it works, it could make the
+   lookup logic more efficient and the handling of lookup results a bit simpler.
+
+2. Maybe find a way to skip the dependence on the anyhow crate and implement 
+   our own Error types? Make it a bit more formal... I don't see any issues with
+   that and it means I won't force anyhow on users of the API.
+
+3. This crate is completely focused on abstract factories depending on a 
+   configuration object. I want to look at different ways in which abstract 
+   factories are used in the real world and see if this logic works for other
+   use cases, and if it should be modified or enhanced in order to fit those 
+   as well.
+
+4. Code is very dirty, I don't like it. Maybe rewrite it once it's stabilized, 
+   and make it cleaner this time.
+
+5. Right now, configuration items must be Clone, the concrete types must be 
+   Structs, and the concrete factories must be Send. Does this leave out many 
+   use cases? Should I find a way to remove these constraints? I never really 
+   tried to go around them, just accepted what the compiler was asking for and 
+   didn't question it beyond this.
+
+6. Are Box objects the way to go for the Trait objects? In all cases? I haven't
+   tried to do it differently. Maybe we need &dyn, Rc, or... (?)
+
+7. Overall, follow the recommendations in 
+   https://towardsdatascience.com/nine-rules-for-creating-procedural-macros-in-rust-595aa476a7ff 
+   using a workspace, using proc_macro_errors, etc...
+
+8. If the name of a concrete type contains invalid identifier characters, the 
+   macro will panic when trying to name the registry function for that concrete 
+   factory. ('factory' attribute). Example: TL-SG3428 contains a hyphen, which 
+   is an invalid character for identifiers. Same goes for all other characters 
+   which are invalid identifiers. I should fix it!
